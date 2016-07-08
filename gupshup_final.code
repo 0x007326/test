@@ -1,0 +1,43 @@
+function MessageHandler(context,event)
+{
+ var usr= context.simpledb.roomleveldata.usr;
+ if(!usr)
+ usr= parseInt(context.simpledb.roomleveldata.usr)+1;
+ context.sendResponse("");
+ if((event.message.toLowerCase()=="hi")||(event.message.toLowerCase()=="hey")||(event.message.toLowerCase()=="hello"))
+ context.sendResponse("Hello "+event.sender);
+ else if(event.message.toLowerCase()=="bye")
+ context.sendResponse("GoodBye");
+ else if((event.message.toLowerCase()=="thanks")||(event.message.toLowerCase()=="thank you")||(event.message.toLowerCase()=="thx")||(event.message.toLowerCase()=="thq")||(event.message.toLowerCase()=="thank u"))
+ else if(event.message.toLowerCase()=="usrinfo")
+ {
+  if(NewUser(context))
+  context.sendResponse("You are a new user");
+  else
+  context.sendResponse("You are an old user");
+ }
+ else if(event.message.toLowerCase()=="date")
+ context.simplehttp.makeGet('http://testminister.com/json/date.json');
+ 
+ }
+ function EventHandler(context,event)
+{
+ var gsr= context.simpledb.botleveldata.gsr;
+ if(!gsr)
+ gsr = parseInt(context.simpledb.botleveldata.gsr)+1;
+ context.sendResponse("");
+}
+function NewUser(context)
+{
+ var newuser=context.simpledb.botleveldata.newuser;
+ if(!newuser)
+ context.simpledb.botleveldata.newuser=true;
+ else
+ context.simpledb.botleveldata.newuser=false;
+}
+function HttpResponseHandler(context,event)
+{
+ var date=JSON.parse(event.getresp);
+ var dt= date.dat;
+ context.sendResponse("Today's date is :"+dt);
+}
